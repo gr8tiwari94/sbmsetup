@@ -1,4 +1,4 @@
-import { Analytics, getShopAnalytics, useNonce } from "@shopify/hydrogen";
+import {Analytics, getShopAnalytics, useNonce} from '@shopify/hydrogen';
 import {
   Outlet,
   useRouteError,
@@ -8,20 +8,21 @@ import {
   Scripts,
   ScrollRestoration,
   useRouteLoaderData,
-} from "react-router";
-import favicon from "~/assets/favicon.svg";
-import { FOOTER_QUERY, HEADER_QUERY } from "~/lib/fragments";
-import resetStyles from "~/styles/reset.css?url";
-import appStyles from "~/styles/app.css?url";
-import { PageLayout } from "./components/PageLayout";
+} from 'react-router';
+import favicon from '~/assets/favicon.svg';
+import {FOOTER_QUERY, HEADER_QUERY} from '~/lib/fragments';
+import resetStyles from '~/styles/reset.css?url';
+import appStyles from '~/styles/app.css?url';
+import tailwindCss from './styles/tailwind.css?url';
+import {PageLayout} from './components/PageLayout';
 
 /**
  * This is important to avoid re-fetching root queries on sub-navigations
  * @type {ShouldRevalidateFunction}
  */
-export const shouldRevalidate = ({ formMethod, currentUrl, nextUrl }) => {
+export const shouldRevalidate = ({formMethod, currentUrl, nextUrl}) => {
   // revalidate when a mutation is performed e.g add to cart, login...
-  if (formMethod && formMethod !== "GET") return true;
+  if (formMethod && formMethod !== 'GET') return true;
 
   // revalidate when manually revalidating via useRevalidator
   if (currentUrl.toString() === nextUrl.toString()) return true;
@@ -47,14 +48,14 @@ export const shouldRevalidate = ({ formMethod, currentUrl, nextUrl }) => {
 export function links() {
   return [
     {
-      rel: "preconnect",
-      href: "https://cdn.shopify.com",
+      rel: 'preconnect',
+      href: 'https://cdn.shopify.com',
     },
     {
-      rel: "preconnect",
-      href: "https://shop.app",
+      rel: 'preconnect',
+      href: 'https://shop.app',
     },
-    { rel: "icon", type: "image/svg+xml", href: favicon },
+    {rel: 'icon', type: 'image/svg+xml', href: favicon},
   ];
 }
 
@@ -68,7 +69,7 @@ export async function loader(args) {
   // Await the critical data required to render initial state of the page
   const criticalData = await loadCriticalData(args);
 
-  const { storefront, env } = args.context;
+  const {storefront, env} = args.context;
 
   return {
     ...deferredData,
@@ -94,20 +95,20 @@ export async function loader(args) {
  * needed to render the page. If it's unavailable, the whole page should 400 or 500 error.
  * @param {Route.LoaderArgs}
  */
-async function loadCriticalData({ context }) {
-  const { storefront } = context;
+async function loadCriticalData({context}) {
+  const {storefront} = context;
 
   const [header] = await Promise.all([
     storefront.query(HEADER_QUERY, {
       cache: storefront.CacheLong(),
       variables: {
-        headerMenuHandle: "main-menu", // Adjust to your header menu handle
+        headerMenuHandle: 'main-menu', // Adjust to your header menu handle
       },
     }),
     // Add other queries here, so that they are loaded in parallel
   ]);
 
-  return { header };
+  return {header};
 }
 
 /**
@@ -116,15 +117,15 @@ async function loadCriticalData({ context }) {
  * Make sure to not throw any errors here, as it will cause the page to 500.
  * @param {Route.LoaderArgs}
  */
-function loadDeferredData({ context }) {
-  const { storefront, customerAccount, cart } = context;
+function loadDeferredData({context}) {
+  const {storefront, customerAccount, cart} = context;
 
   // defer the footer query (below the fold)
   const footer = storefront
     .query(FOOTER_QUERY, {
       cache: storefront.CacheLong(),
       variables: {
-        footerMenuHandle: "footer", // Adjust to your footer menu handle
+        footerMenuHandle: 'footer', // Adjust to your footer menu handle
       },
     })
     .catch((error) => {
@@ -142,7 +143,7 @@ function loadDeferredData({ context }) {
 /**
  * @param {{children?: React.ReactNode}}
  */
-export function Layout({ children }) {
+export function Layout({children}) {
   const nonce = useNonce();
 
   return (
@@ -150,6 +151,7 @@ export function Layout({ children }) {
       <head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width,initial-scale=1" />
+        <link rel="stylesheet" href={tailwindCss}></link>
         <link rel="stylesheet" href={resetStyles}></link>
         <link rel="stylesheet" href={appStyles}></link>
         <Meta />
@@ -166,7 +168,7 @@ export function Layout({ children }) {
 
 export default function App() {
   /** @type {RootLoader} */
-  const data = useRouteLoaderData("root");
+  const data = useRouteLoaderData('root');
 
   if (!data) {
     return <Outlet />;
@@ -187,7 +189,7 @@ export default function App() {
 
 export function ErrorBoundary() {
   const error = useRouteError();
-  let errorMessage = "Unknown error";
+  let errorMessage = 'Unknown error';
   let errorStatus = 500;
 
   if (isRouteErrorResponse(error)) {
