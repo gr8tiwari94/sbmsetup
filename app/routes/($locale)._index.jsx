@@ -5,7 +5,7 @@ export async function loader({context}) {
 
   const {products} = await storefront.query(`
     query HomeProducts {
-      products(first: 8) {
+      products(first: 10) {
         nodes {
           id
           title
