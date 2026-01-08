@@ -47,7 +47,7 @@ export default function Home() {
               src={product.featuredImage?.url}
               alt={product.featuredImage?.altText}
             />
-            <h2 className="mt-2 font-medium">{product.title}</h2>
+            <h2 className="mt-2 font-medium">{product.title} new</h2>
             <p>₹{product.priceRange.minVariantPrice.amount}</p>
           </a>
         ))}
